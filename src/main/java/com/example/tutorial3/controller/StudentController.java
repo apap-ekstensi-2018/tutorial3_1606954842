@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,16 +34,38 @@ public class StudentController {
         return "view";
     }
 
-//    @RequestMapping("/student/view/{npm}")
-//    public String view(@PathVariable Optional<String> npm, Model model){
-//        if (npm.isPresent()){
-//            StudentModel student = studentService.selectStudent(npm);
-//            model.addAttribute("student", student);
-//            return "view";
-//        }else{
-//            return "error";
-//        }
-//    }
+    @RequestMapping(value = {"/student/view/","/student/view/{npm}"})
+    public String view(@PathVariable Optional<String> npm, Model model){
+        if (npm.isPresent()){
+            StudentModel student = studentService.selectStudent(npm.get());
+            if (student != null){
+                model.addAttribute("student", student);
+                return "view";
+            }else{
+                return "errorPage";
+            }
+        }else{
+            return "errorPage";
+        }
+    }
+
+    @RequestMapping(value = {"/student/delete/","/student/delete/{npm}"})
+    public String delete(@PathVariable Optional<String> npm, Model model){
+        if (npm.isPresent()){
+            StudentModel student = studentService.selectStudent(npm.get());
+            if(student != null){
+                studentService.deleteStudent(student);
+                model.addAttribute("npm", npm.get());
+                return "successDelete";
+            }else{
+                return "errorPage";
+            }
+        }else{
+            return "errorPage";
+        }
+
+    }
+
 
     @RequestMapping("/student/viewall")
     public String viewall(Model model){

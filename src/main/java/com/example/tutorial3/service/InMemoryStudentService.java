@@ -29,5 +29,10 @@ public class InMemoryStudentService implements StudentService{
         studentList.add(student);
     }
 
+    @Override
+    public void deleteStudent(StudentModel student){
+        studentList.remove(student);
+    }
+
 
 }
